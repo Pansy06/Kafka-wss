@@ -6,13 +6,13 @@ import * as WebSocket from 'ws';
 
 
 // Specify the passphrase for your SSL private key
-const privateKeyPassphrase = 'your_passphrase_here'; // Replace with your passphrase
+const privateKeyPassphrase = 'your_passphrase_here';
 
 // Create an HTTPS server with the passphrase
 const server = https.createServer({
-  cert: fs.readFileSync('your_ssl_certificate.crt'), // Replace with your SSL certificate file path
-  key: fs.readFileSync('your_ssl_private_key.key'),   // Replace with your SSL private key file path
-  passphrase: privateKeyPassphrase, // Add the passphrase here
+  cert: fs.readFileSync('your_ssl_certificate.crt'), 
+  key: fs.readFileSync('your_ssl_private_key.key'),   
+  passphrase: privateKeyPassphrase, 
 });
 
 // Create a WebSocket server by attaching it to the HTTPS server
@@ -27,17 +27,6 @@ const kafka = new Kafka({
 // Create a Kafka consumer
 const consumer = kafka.consumer({ groupId: '0' });
 
-// Function to send messages to WebSocket clients
-const sendMessageToClients = (message) => {
-  console.log('sendMessageToClients works 1');
-  wss.clients.forEach((client) => {
-    if (client.readyState == WebSocket.OPEN && message != undefined) {
-      console.log('sendMessageToClients works 2');
-      client.send(message.value.toString());
-    }
-  });
-};
-
 // Broadcast to all.
 wss.broadcast = function broadcast(data) {
   console.log('broadcast works 1');
@@ -51,30 +40,6 @@ wss.broadcast = function broadcast(data) {
 // WebSocket server event handling
 wss.on('connection', (ws) => {
   console.log('Client connected');
-  
-  //Periodically send messages to the client
-  // setInterval(() => {
-  //   wss.clients.forEach(function each(client) {
-  //     if ( client.readyState == WebSocket.OPEN && data != undefined ) 
-  //       console.log('peridically broadcast message');
-  //       client.send("Hello World");
-  //   });
-
-  // }, 1000); // Adjust the interval (in milliseconds) to your desired frequency
-
-  // //Periodically send messages to the client
-  // setInterval(() => {
-  //   wss.broadcast("Hello World");
-
-  // }, 1000); // Adjust the interval (in milliseconds) to your desired frequency
-
-  // Handle incoming messages from the client
-  // ws.on('message', (message) => {
-  //   console.log(`Received: ${message}`);
-    
-  //   // Send a response back to the client
-  //   ws.send(`Server received: ${message}`);
-  // });
 
   ws.on('message', function incoming(data) {
     console.log(`Received: ${data.toString()}`);
