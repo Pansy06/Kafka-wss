@@ -21,7 +21,7 @@ const wss = new WebSocket.WebSocketServer({ server });
 // Create a Kafka client
 const kafka = new Kafka({
   clientId: 'my-app',
-  brokers: ['10.240.208.54:9092'], // Replace with your Kafka broker(s) URL
+  brokers: ['10.240.214.73:9092'], // Replace with your Kafka broker(s) URL
 });
 
 // Create a Kafka consumer
